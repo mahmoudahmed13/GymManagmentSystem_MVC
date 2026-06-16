@@ -1,4 +1,5 @@
-﻿using GymManagement.DAL.Repositorities.Classes;
+﻿using GymManagement.DAL.Data.Models;
+using GymManagement.DAL.Repositorities.Classes;
 using GymManagement.DAL.Repositorities.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +11,8 @@ namespace GymManagment.Controllers
         //Details Action => GET BaseURL/Plans/Details/Id
 
         //private readonly GymDbContext dbContext = new GymDbContext();
-        private readonly IPlanRepository planRepository;
-        public PlansController(IPlanRepository repository)
+        private readonly IGenericRepository<Plan> planRepository;
+        public PlansController(IGenericRepository<Plan> repository)
         {
             planRepository = repository;
         }
