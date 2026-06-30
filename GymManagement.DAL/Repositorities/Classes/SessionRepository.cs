@@ -25,5 +25,10 @@ namespace GymManagement.DAL.Repositorities.Classes
         {
             return _dbContext.Bookings.AsNoTracking().CountAsync(b => b.SessionId == sessionId);
         }
+
+        public async Task<Session?> GetSessionWithTrainerAndCategory(int sessionId, CancellationToken ct = default)
+        {
+            return await _dbContext.Sessions.AsNoTracking().Include(x => x.Trainer).Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == sessionId);
+        }
     }
 }

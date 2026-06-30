@@ -1,10 +1,11 @@
 ﻿using GymManagement.BLL.Services.Interfaces;
 using GymManagement.BLL.ViewModels.PlanViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GymManagment.Controllers
 {
+    [Authorize]
     public class PlansController : Controller
     {
         private readonly IPlanService _planService;
@@ -23,12 +24,14 @@ namespace GymManagment.Controllers
         public async Task<IActionResult> Details(int id, CancellationToken ct)
         {
             var plan = await _planService.GetPlanByIdAsync(id, ct);
-            if (plan is null)
+            if (plan.success)
+                return View(plan.Value);
+
+            else
             {
-                TempData["ErrorMessage"] = "Plan not fount.";
+                TempData["ErrorMessage"] = plan.error;
                 return RedirectToAction(nameof(Index));
             }
-            return View(plan);
         }
 
         //● Edit(int id) - Plan edit form
@@ -36,12 +39,13 @@ namespace GymManagment.Controllers
         public async Task<IActionResult> Edit(int id, CancellationToken ct = default)
         {
             var plan = await _planService.GetPlanToUpdateAsync(id, ct);
-            if (plan is null)
+            if (plan.success)
+                return View(plan.Value);
+            else
             {
-                TempData["ErrorMessage"] = "Plan not fount.";
+                TempData["ErrorMessage"] = plan.error;
                 return RedirectToAction(nameof(Index));
             }
-            return View(plan);
 
         }
 
@@ -49,13 +53,13 @@ namespace GymManagment.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, UpdatePlanViewModel model, CancellationToken ct = default)
         {
-            if(!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
 
             var result = await _planService.UpdatePlanAsync(id, model, ct);
-            if (result)
+            if (result.success)
                 TempData["SuccessMessage"] = "Plan updated successfully.";
             else
-                TempData["ErrorMessage"] = "Plan Failed to update.";
+                TempData["ErrorMessage"] = result.error;
 
             return RedirectToAction(nameof(Index));
         }
@@ -65,10 +69,10 @@ namespace GymManagment.Controllers
         public async Task<IActionResult> Activate(int id, CancellationToken ct = default)
         {
             var plan = await _planService.ToggleActivationAsync(id, ct);
-            if (plan)
+            if (plan.success)
                 TempData["SuccessMessage"] = "Plan updated successfully.";
             else
-                TempData["ErrorMessage"] = "Plan Failed to update.";
+                TempData["ErrorMessage"] = plan.error;
 
             return RedirectToAction(nameof(Index));
 
