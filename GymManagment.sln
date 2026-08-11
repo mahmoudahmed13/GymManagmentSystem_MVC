@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.37301.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymManagement.PL", "GymManagment\GymManagement.PL.csproj", "{CB58BAB3-01B9-436A-8C9F-C7FDF3A1E7C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymManagement.DLL", "GymManagement.DLL\GymManagement.DLL.csproj", "{80AC7B80-7A64-4975-858E-853DA4958069}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymManagement.BLL", "GymManagement.DLL\GymManagement.BLL.csproj", "{80AC7B80-7A64-4975-858E-853DA4958069}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymManagement.DAL", "GymManagement.DAL\GymManagement.DAL.csproj", "{A734EAFA-C0E0-4E27-ACAB-F8F350CBD267}"
 EndProject
