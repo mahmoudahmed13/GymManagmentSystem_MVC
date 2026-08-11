@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using GymManagement.BLL.ViewModels.BookingViewModels;
+using GymManagement.BLL.ViewModels.MemberShipViewModels;
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.BLL.ViewModels.SessionViewModels;
@@ -15,6 +17,8 @@ namespace GymManagement.BLL
             MapSession();
             MapPlan();
             MapTrainer();
+            MapMemberShip();
+            MapBooking();
         }
         private void MapMember()
         {
@@ -48,6 +52,7 @@ namespace GymManagement.BLL
                 }))
                 .ForMember(dest => dest.HealthRecord, opt => opt.MapFrom(src => src.HealthRecordViewModel));
 
+            CreateMap<Member, MemberViewModelForBooking>();
         }
         private void MapSession()
         {
@@ -69,13 +74,13 @@ namespace GymManagement.BLL
         private void MapTrainer()
         {
             CreateMap<Trainer, TrainerViewModel>()
-                .ForMember(dest => dest.specialization , opt => opt.MapFrom(src => src.Specialty.ToString()))
+                .ForMember(dest => dest.specialization, opt => opt.MapFrom(src => src.Specialty.ToString()))
                 .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth.ToString()))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Address.BuildingNumber} - {src.Address.Street} - {src.Address.City}"));
 
             CreateMap<CreateTrainerViewModel, Trainer>()
-               .ForMember(dest => dest.Specialty , opt => opt.MapFrom(src => src.specialization))
-               .ForMember(dest => dest.Address , opt => opt.MapFrom(src => new Address()
+               .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.specialization))
+               .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address()
                {
                    BuildingNumber = src.BuildingNumber,
                    Street = src.Street,
@@ -85,6 +90,24 @@ namespace GymManagement.BLL
                 .ForMember(dest => dest.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber))
                 .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City)).ReverseMap();
+        }
+        private void MapMemberShip()
+        {
+            CreateMap<CreateMemberShipViewModel, MemberShip>();
+            CreateMap<MemberShip, MemberShipViewModel>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Plan.Name))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndData));
+            CreateMap<MemberSelectViewModel, Member>().ReverseMap();
+            CreateMap<PlanSelectViewModel, Plan>().ReverseMap();
+        }
+        private void MapBooking()
+        {
+            CreateMap<Member, MemberViewModelForBooking>();
+            CreateMap<CreateBookingViewModel, Booking>();
+            CreateMap<Booking, SessionMembersViewModel>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name));
         }
     }
 }

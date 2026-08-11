@@ -53,7 +53,7 @@ namespace GymManagement.BLL.Services.Attachment
 
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string folderName, CancellationToken ct = default)
         {
-            if (fileStream == null || fileStream.CanRead) return null;
+            if (fileStream == null || !fileStream.CanRead) return null;
             if (fileStream.Length == 0) return null;
 
             //2.Check the size — reject anything over 5 MB.
